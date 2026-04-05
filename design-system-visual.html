@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clean Shopper — Design System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #FAF8F5;
+      color: #2C2420;
+      font-family: 'Jost', sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      padding: 96px 64px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Page Header */
+    .page-header {
+      border-bottom: 1px solid #DDD7CE;
+      padding-bottom: 40px;
+      margin-bottom: 96px;
+    }
+    .page-header .eyebrow {
+      font-family: 'Jost', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #A89E95;
+      margin-bottom: 12px;
+    }
+    .page-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 56px;
+      font-weight: 500;
+      line-height: 1.1;
+      color: #2C2420;
+      margin-bottom: 16px;
+    }
+    .page-header p {
+      font-family: 'Jost', sans-serif;
+      font-size: 16px;
+      color: #6B635B;
+      max-width: 560px;
+    }
+    .page-header .meta {
+      margin-top: 24px;
+      font-size: 12px;
+      color: #A89E95;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 96px;
+    }
+    .section-label {
+      font-family: 'Jost', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #A89E95;
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 1.25;
+      color: #2C2420;
+      margin-bottom: 40px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #DDD7CE;
+    }
+
+    /* Color Grid */
+    .color-group {
+      margin-bottom: 48px;
+    }
+    .color-group-title {
+      font-family: 'Jost', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #6B635B;
+      margin-bottom: 16px;
+      letter-spacing: 0.04em;
+    }
+    .color-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .swatch {
+      width: 160px;
+    }
+    .swatch-block {
+      width: 100%;
+      height: 80px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border: 1px solid rgba(44,36,32,0.06);
+    }
+    .swatch-name {
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #2C2420;
+      margin-bottom: 2px;
+    }
+    .swatch-hex {
+      font-family: 'Jost', sans-serif;
+      font-size: 12px;
+      color: #A89E95;
+      margin-bottom: 4px;
+    }
+    .swatch-usage {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      color: #6B635B;
+      line-height: 1.4;
+    }
+
+    /* Type Scale */
+    .type-row {
+      display: flex;
+      align-items: baseline;
+      gap: 40px;
+      padding: 28px 0;
+      border-bottom: 1px solid #DDD7CE;
+    }
+    .type-row:first-child {
+      padding-top: 0;
+    }
+    .type-meta {
+      width: 180px;
+      flex-shrink: 0;
+    }
+    .type-token {
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #2C2420;
+      margin-bottom: 2px;
+    }
+    .type-spec {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      color: #A89E95;
+      line-height: 1.5;
+    }
+    .type-sample {
+      flex: 1;
+      color: #2C2420;
+    }
+    .type-usage {
+      width: 220px;
+      flex-shrink: 0;
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      color: #6B635B;
+      line-height: 1.5;
+      align-self: center;
+    }
+
+    /* Spacing Scale */
+    .spacing-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .space-row {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      padding: 16px 0;
+      border-bottom: 1px solid #DDD7CE;
+    }
+    .space-meta {
+      width: 100px;
+      flex-shrink: 0;
+    }
+    .space-token {
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #2C2420;
+    }
+    .space-value {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      color: #A89E95;
+    }
+    .space-bar-wrap {
+      width: 260px;
+      flex-shrink: 0;
+    }
+    .space-bar {
+      background-color: #C5D5C9;
+      height: 16px;
+      border-radius: 4px;
+    }
+    .space-usage {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      color: #6B635B;
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    /* Radius */
+    .radius-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .radius-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      width: 160px;
+    }
+    .radius-block {
+      width: 80px;
+      height: 56px;
+      background-color: #F2EDE4;
+      border: 1.5px solid #DDD7CE;
+    }
+    .radius-meta .radius-token {
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #2C2420;
+      margin-bottom: 2px;
+    }
+    .radius-meta .radius-value {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      color: #A89E95;
+      margin-bottom: 4px;
+    }
+    .radius-meta .radius-usage {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      color: #6B635B;
+      line-height: 1.4;
+    }
+
+    /* Shadows */
+    .shadow-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+    }
+    .shadow-item {
+      width: 220px;
+    }
+    .shadow-block {
+      width: 100%;
+      height: 80px;
+      background-color: #FFFFFF;
+      border-radius: 8px;
+      margin-bottom: 14px;
+    }
+    .shadow-token {
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #2C2420;
+      margin-bottom: 2px;
+    }
+    .shadow-value {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      color: #A89E95;
+      margin-bottom: 4px;
+      word-break: break-all;
+    }
+    .shadow-usage {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      color: #6B635B;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <p class="eyebrow">Design System v1.0</p>
+    <h1>Clean Shopper</h1>
+    <p>A personal product research assistant for ingredient-aware consumers. Light, sustainable, transparent, earth-toned, and minimal.</p>
+    <p class="meta">Generated 2026-04-03 &nbsp;·&nbsp; Cormorant Garamond + Jost &nbsp;·&nbsp; Tailwind CSS</p>
+  </header>
+
+  <!-- ─── COLORS ─────────────────────────────────── -->
+  <section class="section">
+    <p class="section-label">01</p>
+    <h2 class="section-title">Color System</h2>
+
+    <div class="color-group">
+      <p class="color-group-title">Primary</p>
+      <div class="color-row">
+        <div class="swatch">
+          <div class="swatch-block" style="background:#9E968E;"></div>
+          <div class="swatch-name">primary</div>
+          <div class="swatch-hex">#9E968E</div>
+          <div class="swatch-usage">Brand presence, primary text-on-light, logo mark</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#BDB6AF;"></div>
+          <div class="swatch-name">primary-light</div>
+          <div class="swatch-hex">#BDB6AF</div>
+          <div class="swatch-usage">Dividers with warm tone, inactive tabs, muted icons</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#6B635B;"></div>
+          <div class="swatch-name">primary-dark</div>
+          <div class="swatch-hex">#6B635B</div>
+          <div class="swatch-usage">Strong secondary text, input borders on focus</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="color-group">
+      <p class="color-group-title">Secondary</p>
+      <div class="color-row">
+        <div class="swatch">
+          <div class="swatch-block" style="background:#F2EDE4;"></div>
+          <div class="swatch-name">secondary-cream</div>
+          <div class="swatch-hex">#F2EDE4</div>
+          <div class="swatch-usage">Card surfaces, section backgrounds, input fills</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#C5D5C9;"></div>
+          <div class="swatch-name">secondary-sage</div>
+          <div class="swatch-hex">#C5D5C9</div>
+          <div class="swatch-usage">Category tag backgrounds, ingredient-safe fills</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="color-group">
+      <p class="color-group-title">Accent</p>
+      <div class="color-row">
+        <div class="swatch">
+          <div class="swatch-block" style="background:#3D6147;"></div>
+          <div class="swatch-name">accent</div>
+          <div class="swatch-hex">#3D6147</div>
+          <div class="swatch-usage">Primary buttons, active nav, CTAs. One per view.</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#5A8268;"></div>
+          <div class="swatch-name">accent-light</div>
+          <div class="swatch-hex">#5A8268</div>
+          <div class="swatch-usage">Hover states, secondary actions, icon strokes</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#D4AA5F;"></div>
+          <div class="swatch-name">highlight</div>
+          <div class="swatch-hex">#D4AA5F</div>
+          <div class="swatch-usage">Featured badges, "new" tags, star ratings, warm emphasis</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="color-group">
+      <p class="color-group-title">Semantic</p>
+      <div class="color-row">
+        <div class="swatch">
+          <div class="swatch-block" style="background:#4A7C5F;"></div>
+          <div class="swatch-name">success</div>
+          <div class="swatch-hex">#4A7C5F</div>
+          <div class="swatch-usage">"Clean" ratings, confirmed saves, positive states</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#C49A3C;"></div>
+          <div class="swatch-name">warning</div>
+          <div class="swatch-hex">#C49A3C</div>
+          <div class="swatch-usage">"Mixed" ratings, caution alerts, partial results</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#B85C4A;"></div>
+          <div class="swatch-name">error</div>
+          <div class="swatch-hex">#B85C4A</div>
+          <div class="swatch-usage">"Avoid" ratings, errors, destructive confirmations</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="color-group">
+      <p class="color-group-title">Neutrals</p>
+      <div class="color-row">
+        <div class="swatch">
+          <div class="swatch-block" style="background:#FAF8F5; border: 1px solid #DDD7CE;"></div>
+          <div class="swatch-name">neutral-50</div>
+          <div class="swatch-hex">#FAF8F5</div>
+          <div class="swatch-usage">Default page background</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#F2EDE4;"></div>
+          <div class="swatch-name">neutral-100</div>
+          <div class="swatch-hex">#F2EDE4</div>
+          <div class="swatch-usage">Card backgrounds, surface fills</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#DDD7CE;"></div>
+          <div class="swatch-name">neutral-200</div>
+          <div class="swatch-hex">#DDD7CE</div>
+          <div class="swatch-usage">Borders, dividers, card outlines</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#A89E95;"></div>
+          <div class="swatch-name">neutral-400</div>
+          <div class="swatch-hex">#A89E95</div>
+          <div class="swatch-usage">Placeholder text, disabled states</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#6B635B;"></div>
+          <div class="swatch-name">neutral-600</div>
+          <div class="swatch-hex">#6B635B</div>
+          <div class="swatch-usage">Secondary text, supporting copy</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#2C2420;"></div>
+          <div class="swatch-name">neutral-900</div>
+          <div class="swatch-hex">#2C2420</div>
+          <div class="swatch-usage">Primary text, headings. Never use #000000.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── TYPOGRAPHY ────────────────────────────── -->
+  <section class="section">
+    <p class="section-label">02</p>
+    <h2 class="section-title">Typography</h2>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-token">display</div>
+        <div class="type-spec">Cormorant Garamond<br>56px · weight 500<br>leading 1.1</div>
+      </div>
+      <div class="type-sample" style="font-family:'Cormorant Garamond',serif; font-size:56px; font-weight:500; line-height:1.1;">Know what's in it.</div>
+      <div class="type-usage">Hero headlines, marketing moments. Sparse use only.</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-token">h1</div>
+        <div class="type-spec">Cormorant Garamond<br>40px · weight 500<br>leading 1.2</div>
+      </div>
+      <div class="type-sample" style="font-family:'Cormorant Garamond',serif; font-size:40px; font-weight:500; line-height:1.2;">My Product Library</div>
+      <div class="type-usage">Page titles — one per view.</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-token">h2</div>
+        <div class="type-spec">Cormorant Garamond<br>32px · weight 500<br>leading 1.25</div>
+      </div>
+      <div class="type-sample" style="font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:500; line-height:1.25;">Skincare &amp; Body</div>
+      <div class="type-usage">Section headers that introduce a new content group.</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-token">h3</div>
+        <div class="type-spec">Cormorant Garamond<br>24px · weight 500<br>leading 1.3</div>
+      </div>
+      <div class="type-sample" style="font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:500; line-height:1.3;">Osea Ocean Cleanser</div>
+      <div class="type-usage">Card titles, product names, subsection headers.</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-token">h4</div>
+        <div class="type-spec">Jost<br>18px · weight 500<br>leading 1.4</div>
+      </div>
+      <div class="type-sample" style="font-family:'Jost',sans-serif; font-size:18px; font-weight:500; line-height:1.4;">Ingredient Analysis</div>
+      <div class="type-usage">Category labels, form section headers, named groupings.</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-token">body</div>
+        <div class="type-spec">Jost<br>16px · weight 400<br>leading 1.65</div>
+      </div>
+      <div class="type-sample" style="font-family:'Jost',sans-serif; font-size:16px; font-weight:400; line-height:1.65;">This cleanser contains 12 ingredients. 10 have been assessed by EWG. 9 are rated low concern, 1 is rated moderate concern for skin sensitization.</div>
+      <div class="type-usage">Body copy, product descriptions, ingredient explanations.</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-token">small</div>
+        <div class="type-spec">Jost<br>14px · weight 400<br>leading 1.5</div>
+      </div>
+      <div class="type-sample" style="font-family:'Jost',sans-serif; font-size:14px; font-weight:400; line-height:1.5;">Added to Shopping List · Fragrance-Free · EWG Verified</div>
+      <div class="type-usage">Supporting text, metadata, tags, navigation items, button labels.</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-token">micro</div>
+        <div class="type-spec">Jost<br>12px · weight 400<br>leading 1.4</div>
+      </div>
+      <div class="type-sample" style="font-family:'Jost',sans-serif; font-size:12px; font-weight:400; line-height:1.4; color:#A89E95;">Last updated 2026-04-03 · Data sourced from EWG Skin Deep</div>
+      <div class="type-usage">Timestamps, legal text, tooltips, minimal UI labels.</div>
+    </div>
+  </section>
+
+  <!-- ─── SPACING ───────────────────────────────── -->
+  <section class="section">
+    <p class="section-label">03</p>
+    <h2 class="section-title">Spacing Scale</h2>
+    <p style="font-size:14px; color:#6B635B; margin-bottom:32px;">Base unit: 8px</p>
+
+    <div class="spacing-rows">
+      <div class="space-row">
+        <div class="space-meta"><div class="space-token">space-xs</div><div class="space-value">4px</div></div>
+        <div class="space-bar-wrap"><div class="space-bar" style="width:4px;"></div></div>
+        <div class="space-usage">Icon padding, tight internal gaps between inline elements like tags.</div>
+      </div>
+      <div class="space-row">
+        <div class="space-meta"><div class="space-token">space-sm</div><div class="space-value">8px</div></div>
+        <div class="space-bar-wrap"><div class="space-bar" style="width:8px;"></div></div>
+        <div class="space-usage">Compact internal padding within small components like badges and chips.</div>
+      </div>
+      <div class="space-row">
+        <div class="space-meta"><div class="space-token">space-md</div><div class="space-value">16px</div></div>
+        <div class="space-bar-wrap"><div class="space-bar" style="width:16px;"></div></div>
+        <div class="space-usage">Standard internal padding inside buttons, inputs, and small cards.</div>
+      </div>
+      <div class="space-row">
+        <div class="space-meta"><div class="space-token">space-lg</div><div class="space-value">24px</div></div>
+        <div class="space-bar-wrap"><div class="space-bar" style="width:24px;"></div></div>
+        <div class="space-usage">Card padding, list item padding, internal spacing in larger components.</div>
+      </div>
+      <div class="space-row">
+        <div class="space-meta"><div class="space-token">space-xl</div><div class="space-value">40px</div></div>
+        <div class="space-bar-wrap"><div class="space-bar" style="width:40px;"></div></div>
+        <div class="space-usage">Vertical gap between components within a section.</div>
+      </div>
+      <div class="space-row">
+        <div class="space-meta"><div class="space-token">space-2xl</div><div class="space-value">64px</div></div>
+        <div class="space-bar-wrap"><div class="space-bar" style="width:64px;"></div></div>
+        <div class="space-usage">Gap between major content sections on a page.</div>
+      </div>
+      <div class="space-row">
+        <div class="space-meta"><div class="space-token">space-3xl</div><div class="space-value">96px</div></div>
+        <div class="space-bar-wrap"><div class="space-bar" style="width:96px;"></div></div>
+        <div class="space-usage">Page-level top/bottom margins and large section separators.</div>
+      </div>
+      <div class="space-row">
+        <div class="space-meta"><div class="space-token">space-4xl</div><div class="space-value">128px</div></div>
+        <div class="space-bar-wrap"><div class="space-bar" style="width:128px;"></div></div>
+        <div class="space-usage">Hero sections, full-bleed area padding, page-entry spacing.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── BORDER RADIUS ─────────────────────────── -->
+  <section class="section">
+    <p class="section-label">04</p>
+    <h2 class="section-title">Border Radius</h2>
+
+    <div class="radius-row">
+      <div class="radius-item">
+        <div class="radius-block" style="border-radius:4px;"></div>
+        <div class="radius-meta">
+          <div class="radius-token">radius-sm</div>
+          <div class="radius-value">4px</div>
+          <div class="radius-usage">Badges, ingredient tags, small status chips</div>
+        </div>
+      </div>
+      <div class="radius-item">
+        <div class="radius-block" style="border-radius:8px;"></div>
+        <div class="radius-meta">
+          <div class="radius-token">radius-md</div>
+          <div class="radius-value">8px</div>
+          <div class="radius-usage">Input fields, buttons, small card thumbnails</div>
+        </div>
+      </div>
+      <div class="radius-item">
+        <div class="radius-block" style="border-radius:16px;"></div>
+        <div class="radius-meta">
+          <div class="radius-token">radius-lg</div>
+          <div class="radius-value">16px</div>
+          <div class="radius-usage">Product cards, modals, drawer panels</div>
+        </div>
+      </div>
+      <div class="radius-item">
+        <div class="radius-block" style="border-radius:9999px;"></div>
+        <div class="radius-meta">
+          <div class="radius-token">radius-full</div>
+          <div class="radius-value">9999px</div>
+          <div class="radius-usage">Pill tags, avatar circles, rounded icon buttons</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SHADOWS ───────────────────────────────── -->
+  <section class="section">
+    <p class="section-label">05</p>
+    <h2 class="section-title">Shadows</h2>
+
+    <div class="shadow-row">
+      <div class="shadow-item">
+        <div class="shadow-block" style="box-shadow: 0 1px 3px rgba(44,36,32,0.06);"></div>
+        <div class="shadow-token">shadow-sm</div>
+        <div class="shadow-value">0 1px 3px rgba(44,36,32,0.06)</div>
+        <div class="shadow-usage">Resting card lift — subtle depth at rest state.</div>
+      </div>
+      <div class="shadow-item">
+        <div class="shadow-block" style="box-shadow: 0 4px 12px rgba(44,36,32,0.08);"></div>
+        <div class="shadow-token">shadow-md</div>
+        <div class="shadow-value">0 4px 12px rgba(44,36,32,0.08)</div>
+        <div class="shadow-usage">Hover state on cards, open dropdowns, focused inputs.</div>
+      </div>
+      <div class="shadow-item">
+        <div class="shadow-block" style="box-shadow: 0 8px 32px rgba(44,36,32,0.12);"></div>
+        <div class="shadow-token">shadow-lg</div>
+        <div class="shadow-value">0 8px 32px rgba(44,36,32,0.12)</div>
+        <div class="shadow-usage">Modals, drawer overlays, floating elements.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── USAGE RULES ───────────────────────────── -->
+  <section class="section">
+    <p class="section-label">06</p>
+    <h2 class="section-title">Usage Rules</h2>
+    <ol style="padding-left:20px; display:flex; flex-direction:column; gap:12px;">
+      <li style="font-size:14px; color:#2C2420; line-height:1.6;">Never hardcode a hex value. Use the token name from tailwind.config.js.</li>
+      <li style="font-size:14px; color:#2C2420; line-height:1.6;">Never hardcode a pixel font size. Use the type scale token classes.</li>
+      <li style="font-size:14px; color:#2C2420; line-height:1.6;">Never hardcode spacing. Use the spacing scale token classes.</li>
+      <li style="font-size:14px; color:#2C2420; line-height:1.6;">Accent (forest green) is for the single most important interactive element per view. Not used for backgrounds or decoration.</li>
+      <li style="font-size:14px; color:#2C2420; line-height:1.6;">Neutral-900 for primary text. Neutral-600 for secondary text. Never use pure black (#000000).</li>
+      <li style="font-size:14px; color:#2C2420; line-height:1.6;">Semantic colors carry meaning. Success = clean/safe only. Error = avoid/unsafe only.</li>
+      <li style="font-size:14px; color:#2C2420; line-height:1.6;">Surfaces must use neutral-50 or secondary-cream. No bright white (#FFFFFF) backgrounds.</li>
+      <li style="font-size:14px; color:#2C2420; line-height:1.6;">Cormorant Garamond for display, h1–h3 (editorial). Jost for h4, body, small, micro (interface).</li>
+      <li style="font-size:14px; color:#2C2420; line-height:1.6;">No saturated colors, loud gradients, or decorative patterns. Tone-on-tone only if texture is needed.</li>
+      <li style="font-size:14px; color:#2C2420; line-height:1.6;">Spacing should feel generous. When in doubt, add more vertical space.</li>
+    </ol>
+  </section>
+
+</body>
+</html>
