@@ -18,6 +18,7 @@ Single-user app. No authentication in V1. Local state plus Supabase for data per
 - Utility functions: camelCase, lives in /src/lib/
 - API calls: all external API calls through /src/lib/api/, never inline in components
 - Styling: Tailwind only. No inline styles. No CSS modules.
+- Styling: Use Tailwind theme classes for all design token values. Never hardcode hex colors, pixel font sizes, or spacing values in components. If a needed token does not exist in the Tailwind config, add it there rather than hardcoding the value. This means bg-primary not #2D7B5E, text-h3 not text-lg, p-lg not p-4.
 - State: React useState and useContext only. No Redux, no Zustand.
 - File naming: kebab-case for all non-component files
 
@@ -33,3 +34,4 @@ Single-user app. No authentication in V1. Local state plus Supabase for data per
 - Build plan: See /docs/build-plan.md -- build phase by phase, do not jump ahead
 - Project context: See /docs/project-context.md -- full project intake and design decisions
 - Design system: See /docs/design-system.md — follow these visual specifications for all UI work. Do not hardcode colors, font sizes, spacing, or shadows.
+- Tailwind config: See tailwind.config.js for design tokens as Tailwind theme extensions. Always use theme classes, never hardcode values.
