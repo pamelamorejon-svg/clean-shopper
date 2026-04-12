@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import NavBar from './components/NavBar'
 import ProductCard from './components/ProductCard'
+import SearchBar from './components/SearchBar'
 
 const sampleProduct = {
   name: "Dr. Bronner's Pure Castile Soap",
@@ -15,6 +16,8 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('research')
   const [isSaved, setIsSaved] = useState(false)
   const [cartCount, setCartCount] = useState(0)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchLoading, setSearchLoading] = useState(false)
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -38,6 +41,20 @@ export default function App() {
             Click the nav tabs to switch active state. Save or add to list to
             see interactive states on the card.
           </p>
+        </div>
+
+        {/* SearchBar — default */}
+        <div className="flex flex-col gap-space-md">
+          <h2 className="text-h4 font-jost text-neutral-600">SearchBar</h2>
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            onSubmit={() => {
+              setSearchLoading(true)
+              setTimeout(() => setSearchLoading(false), 2000)
+            }}
+            isLoading={searchLoading}
+          />
         </div>
 
         {/* ProductCard — interactive */}
