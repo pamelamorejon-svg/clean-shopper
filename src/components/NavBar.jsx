@@ -1,5 +1,5 @@
 const TABS = [
-  { key: 'research', label: 'Research' },
+  { key: 'research', label: 'Home' },
   { key: 'library', label: 'My Products' },
   { key: 'cart', label: 'Cart' },
   { key: 'preferences', label: 'Preferences' },
