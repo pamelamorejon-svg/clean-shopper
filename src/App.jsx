@@ -1,121 +1,65 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import NavBar from './components/NavBar'
+import ProductCard from './components/ProductCard'
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+const sampleProduct = {
+  name: "Dr. Bronner's Pure Castile Soap",
+  brand: "Dr. Bronner's",
+  category: 'Personal Care',
+  rating: 'clean',
+  score: 92,
+  summary: 'Organic, fair trade, no synthetic preservatives or detergents.',
 }
 
-export default App
+export default function App() {
+  const [activeTab, setActiveTab] = useState('research')
+  const [isSaved, setIsSaved] = useState(false)
+  const [cartCount, setCartCount] = useState(0)
+
+  return (
+    <div className="min-h-screen bg-neutral-50">
+
+      {/* NavBar — full width, top of every view */}
+      <NavBar
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        cartCount={cartCount}
+      />
+
+      {/* Page content */}
+      <div className="max-w-xl mx-auto py-space-2xl px-space-lg flex flex-col gap-space-2xl">
+
+        {/* Section header */}
+        <div className="flex flex-col gap-space-sm">
+          <h1 className="text-h2 font-cormorant text-neutral-900">
+            Component Preview
+          </h1>
+          <p className="text-body font-jost text-neutral-600">
+            Click the nav tabs to switch active state. Save or add to list to
+            see interactive states on the card.
+          </p>
+        </div>
+
+        {/* ProductCard — interactive */}
+        <div className="flex flex-col gap-space-md">
+          <h2 className="text-h4 font-jost text-neutral-600">ProductCard</h2>
+          <ProductCard
+            product={sampleProduct}
+            isSaved={isSaved}
+            onSave={() => setIsSaved((prev) => !prev)}
+            onAddToCart={() => setCartCount((n) => n + 1)}
+          />
+        </div>
+
+        {/* ProductCard — loading skeleton */}
+        <div className="flex flex-col gap-space-md">
+          <h2 className="text-h4 font-jost text-neutral-600">
+            ProductCard — loading skeleton
+          </h2>
+          <ProductCard product={sampleProduct} isLoading />
+        </div>
+
+      </div>
+    </div>
+  )
+}
