@@ -1,6 +1,6 @@
 const TABS = [
   { key: 'research', label: 'Home' },
-  { key: 'library', label: 'My Products' },
+  { key: 'library', label: 'Search' },
   { key: 'cart', label: 'Cart' },
   { key: 'preferences', label: 'Preferences' },
 ]

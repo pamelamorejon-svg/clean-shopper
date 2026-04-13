@@ -6,7 +6,7 @@ const CATEGORIES = ['All', 'Personal Care', 'Home Cleaning', 'Baby Care', 'Kitch
 
 // ─── BrowsePage ───────────────────────────────────────────────────────────────
 
-export default function BrowsePage() {
+export default function BrowsePage({ onNavigate }) {
   const [products, setProducts] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -37,11 +37,22 @@ export default function BrowsePage() {
     <div className="min-h-screen bg-neutral-50">
 
       {/* Page header */}
-      <div className="max-w-screen-xl mx-auto px-space-lg pt-space-2xl pb-space-xl">
-        <h1 className="text-h1 font-cormorant text-neutral-900">Browse Products</h1>
-        <p className="text-body font-jost text-neutral-600 mt-space-sm">
-          AI-assessed products ranked by ingredient safety. Save the ones worth buying.
-        </p>
+      <div className="max-w-screen-xl mx-auto px-space-lg pt-space-2xl pb-space-xl flex items-start justify-between gap-space-lg">
+        <div>
+          <h1 className="text-h1 font-cormorant text-neutral-900">Browse Products</h1>
+          <p className="text-body font-jost text-neutral-600 mt-space-sm">
+            AI-assessed products ranked by ingredient safety. Save the ones worth buying.
+          </p>
+        </div>
+        <button
+          onClick={() => onNavigate('library')}
+          className="shrink-0 inline-flex items-center gap-space-xs text-small font-jost text-accent hover:text-accent-light transition-colors duration-150 mt-space-sm"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+          Search products
+        </button>
       </div>
 
       {/* Category filter row */}

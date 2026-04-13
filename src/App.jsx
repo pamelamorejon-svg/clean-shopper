@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import NavBar from './components/NavBar'
 import BrowsePage from './features/browse/BrowsePage'
+import SearchPage from './features/search/SearchPage'
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('research')
@@ -13,7 +14,8 @@ export default function App() {
         onTabChange={setActiveTab}
         cartCount={cartCount}
       />
-      <BrowsePage />
+      {activeTab === 'research' && <BrowsePage onNavigate={setActiveTab} />}
+      {activeTab === 'library'  && <SearchPage onNavigate={setActiveTab} />}
     </div>
   )
 }
