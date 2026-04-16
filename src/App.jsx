@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from './lib/supabase'
+import { signOut } from './lib/api/auth'
 import NavBar from './components/NavBar'
 import BrowsePage from './features/browse/BrowsePage'
 import SearchPage from './features/search/SearchPage'
@@ -37,7 +38,7 @@ export default function App() {
         activeTab={activeTab}
         onTabChange={setActiveTab}
         cartCount={cartCount}
-        onSignOut={() => supabase.auth.signOut()}
+        onSignOut={signOut}
       />
       {activeTab === 'research' && <BrowsePage onNavigate={setActiveTab} />}
       {activeTab === 'library'  && <SearchPage onNavigate={setActiveTab} />}
