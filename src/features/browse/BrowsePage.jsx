@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import ProductCard from '../../components/ProductCard'
 import { fetchProducts } from '../../lib/api/products'
+import { fetchSavedProductIds, saveProduct, unsaveProduct } from '../../lib/api/saved-products'
 
 const CATEGORIES = ['All', 'Personal Care', 'Home Cleaning', 'Baby Care', 'Kitchen']
 
@@ -14,8 +15,11 @@ export default function BrowsePage({ onNavigate }) {
   const [savedIds, setSavedIds] = useState(new Set())
 
   useEffect(() => {
-    fetchProducts()
-      .then(setProducts)
+    Promise.all([fetchProducts(), fetchSavedProductIds()])
+      .then(([products, savedIds]) => {
+        setProducts(products)
+        setSavedIds(savedIds)
+      })
       .catch((err) => setError(err.message))
       .finally(() => setIsLoading(false))
   }, [])
@@ -25,12 +29,26 @@ export default function BrowsePage({ onNavigate }) {
       ? products
       : products.filter((p) => p.category === activeCategory)
 
-  function toggleSave(id) {
+  async function toggleSave(id) {
+    const isSaved = savedIds.has(id)
+
+    // Optimistic update
     setSavedIds((prev) => {
       const next = new Set(prev)
-      next.has(id) ? next.delete(id) : next.add(id)
+      isSaved ? next.delete(id) : next.add(id)
       return next
     })
+
+    try {
+      isSaved ? await unsaveProduct(id) : await saveProduct(id)
+    } catch {
+      // Revert on failure
+      setSavedIds((prev) => {
+        const next = new Set(prev)
+        isSaved ? next.add(id) : next.delete(id)
+        return next
+      })
+    }
   }
 
   return (
@@ -81,14 +99,12 @@ export default function BrowsePage({ onNavigate }) {
       {/* Product grid */}
       <div className="max-w-screen-xl mx-auto px-space-lg pb-space-2xl">
 
-        {/* Error state */}
         {error && (
           <p className="text-body font-jost text-error">
             Failed to load products: {error}
           </p>
         )}
 
-        {/* Loading skeletons */}
         {isLoading && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-space-lg">
             {Array.from({ length: 6 }).map((_, i) => (
@@ -97,7 +113,6 @@ export default function BrowsePage({ onNavigate }) {
           </div>
         )}
 
-        {/* Loaded grid */}
         {!isLoading && !error && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-space-lg">
             {visibleProducts.map((product) => (

@@ -1,7 +1,8 @@
-import { useState, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import SearchBar from '../../components/SearchBar'
 import ProductCard from '../../components/ProductCard'
 import { searchProducts } from '../../lib/api/products'
+import { fetchSavedProductIds, saveProduct, unsaveProduct } from '../../lib/api/saved-products'
 
 // ─── States ───────────────────────────────────────────────────────────────────
 
@@ -42,17 +43,19 @@ export default function SearchPage({ onNavigate }) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const [savedIds, setSavedIds] = useState(new Set())
-
-  // Track the last submitted query separately from the live input value
   const [submittedQuery, setSubmittedQuery] = useState('')
   const hasSearched = submittedQuery.length > 0
   const abortRef = useRef(null)
+
+  // Load saved state once on mount
+  useEffect(() => {
+    fetchSavedProductIds().then(setSavedIds).catch(() => {})
+  }, [])
 
   async function handleSubmit() {
     const term = query.trim()
     if (!term) return
 
-    // Cancel any in-flight search
     if (abortRef.current) abortRef.current = false
 
     setSubmittedQuery(term)
@@ -73,12 +76,26 @@ export default function SearchPage({ onNavigate }) {
     }
   }
 
-  function toggleSave(id) {
+  async function toggleSave(id) {
+    const isSaved = savedIds.has(id)
+
+    // Optimistic update
     setSavedIds((prev) => {
       const next = new Set(prev)
-      next.has(id) ? next.delete(id) : next.add(id)
+      isSaved ? next.delete(id) : next.add(id)
       return next
     })
+
+    try {
+      isSaved ? await unsaveProduct(id) : await saveProduct(id)
+    } catch {
+      // Revert on failure
+      setSavedIds((prev) => {
+        const next = new Set(prev)
+        isSaved ? next.add(id) : next.delete(id)
+        return next
+      })
+    }
   }
 
   return (
@@ -115,7 +132,6 @@ export default function SearchPage({ onNavigate }) {
       {/* Results area */}
       <div className="max-w-screen-xl mx-auto px-space-lg pb-space-2xl">
 
-        {/* Loading skeletons */}
         {isLoading && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-space-lg">
             {Array.from({ length: 3 }).map((_, i) => (
@@ -124,15 +140,12 @@ export default function SearchPage({ onNavigate }) {
           </div>
         )}
 
-        {/* Error */}
         {!isLoading && error && <ErrorState message={error} />}
 
-        {/* No results */}
         {!isLoading && !error && hasSearched && results.length === 0 && (
           <EmptyState query={submittedQuery} />
         )}
 
-        {/* Results grid */}
         {!isLoading && !error && results.length > 0 && (
           <>
             <p className="text-small font-jost text-neutral-600 mb-space-lg">
@@ -152,7 +165,6 @@ export default function SearchPage({ onNavigate }) {
           </>
         )}
 
-        {/* Idle — nothing searched yet */}
         {!isLoading && !hasSearched && <IdleState />}
 
       </div>
