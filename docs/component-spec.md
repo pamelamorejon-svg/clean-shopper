@@ -1,6 +1,6 @@
 # Component Specification: Clean Shopper
-**Version:** 1.0
-**Last Updated:** 2026-04-11
+**Version:** 1.1
+**Last Updated:** 2026-04-16
 **Source:** Generated from /docs/design-system.md and tailwind.config.js
 
 ---
@@ -64,7 +64,9 @@ All Tailwind classes below reference tokens defined in `tailwind.config.js`. Nev
 
 **Container:** `bg-secondary-cream rounded-radius-lg shadow-sm p-space-lg flex flex-col gap-space-md`
 
-**Image area:** `w-full aspect-video object-cover rounded-radius-md bg-neutral-200` (neutral-200 as placeholder background)
+**Image area (with image):** `w-full aspect-video object-contain rounded-radius-md bg-white p-space-md` — white background with padding so the product doesn't touch the edges; `object-contain` preserves full product visibility.
+
+**Image area (placeholder, no imageUrl):** `w-full aspect-video rounded-radius-md bg-neutral-200`
 
 **Product name:** `text-h3 font-cormorant text-neutral-900`
 
@@ -232,16 +234,17 @@ SafetyBadge is display-only and has no interactive states. It does not change on
 
 | Prop | Type | Required | Description |
 |---|---|---|---|
-| `activeTab` | `'research' \| 'library' \| 'cart' \| 'preferences'` | ✅ | Currently active view |
+| `activeTab` | `'research' \| 'library' \| 'chat' \| 'cart' \| 'preferences'` | ✅ | Currently active view |
 | `onTabChange` | `function` | ✅ | Called with the new tab key when the user clicks a tab |
 | `cartCount` | `number` | ❌ | Number of items in the shopping list; displays a badge on the Cart tab when greater than 0 |
+| `onSignOut` | `function` | ❌ | When provided, renders a "Sign out" button baseline-aligned with the tab list |
 
 ### Visual Structure
 
 ```
-┌──────────────────────────────────────────────────────────────────┐
-│  Clean Shopper            Research  My Products  Cart  Preferences│
-└──────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  Clean Shopper       Home  Search  Ask AI  Preferences  Cart    Sign out    │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 **Container:** `w-full bg-neutral-50 border-b border-neutral-200 px-space-2xl py-space-md flex items-center justify-between`
@@ -272,7 +275,7 @@ NavBar itself has no loading or error state — it is always visible and functio
 ### Usage Rules
 
 - **Use once, at the top of every view.** Never render NavBar more than once per page or inside a card or panel.
-- **Do not add tabs** beyond the four defined here (Research, My Products, Cart, Preferences) without explicitly planning a new view. V1 has exactly four tabs.
+- **Do not add tabs** beyond the five defined here (Home, Search, Ask AI, Cart, Preferences) without explicitly planning a new view. V1 has exactly five tabs plus the Sign Out action.
 - The wordmark is not a link and does not navigate. It is a brand identifier only.
 - Do not use NavBar inside a modal or drawer — navigation is a page-level concern.
 

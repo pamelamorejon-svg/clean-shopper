@@ -4,6 +4,7 @@ import { signOut } from './lib/api/auth'
 import NavBar from './components/NavBar'
 import BrowsePage from './features/browse/BrowsePage'
 import SearchPage from './features/search/SearchPage'
+import ChatPage from './features/chat/ChatPage'
 import SignInPage from './features/auth/SignInPage'
 import SignUpPage from './features/auth/SignUpPage'
 
@@ -33,15 +34,24 @@ export default function App() {
 
   // Signed in — show main app
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="h-screen flex flex-col bg-neutral-50">
       <NavBar
         activeTab={activeTab}
         onTabChange={setActiveTab}
         cartCount={cartCount}
         onSignOut={signOut}
       />
-      {activeTab === 'research' && <BrowsePage onNavigate={setActiveTab} />}
-      {activeTab === 'library'  && <SearchPage onNavigate={setActiveTab} />}
+      {activeTab === 'research' && (
+        <div className="flex-1 overflow-y-auto">
+          <BrowsePage onNavigate={setActiveTab} />
+        </div>
+      )}
+      {activeTab === 'library' && (
+        <div className="flex-1 overflow-y-auto">
+          <SearchPage onNavigate={setActiveTab} />
+        </div>
+      )}
+      {activeTab === 'chat' && <ChatPage />}
     </div>
   )
 }

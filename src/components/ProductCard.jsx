@@ -54,7 +54,7 @@ export default function ProductCard({
         <img
           src={imageUrl}
           alt={name}
-          className="w-full aspect-video object-cover rounded-radius-md"
+          className="w-full aspect-video object-contain rounded-radius-md bg-white p-space-md"
         />
       ) : (
         <div

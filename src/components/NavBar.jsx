@@ -1,6 +1,7 @@
 const TABS = [
   { key: 'research', label: 'Home' },
   { key: 'library', label: 'Search' },
+  { key: 'chat', label: 'Ask AI' },
   { key: 'preferences', label: 'Preferences' },
   { key: 'cart', label: 'Cart' },
 ]
