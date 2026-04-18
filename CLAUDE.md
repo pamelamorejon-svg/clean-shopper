@@ -37,3 +37,5 @@ Multi-user app with Supabase Auth. Users sign up and sign in with email and pass
 - Project context: See /docs/project-context.md -- full project intake and design decisions
 - Design system: See /docs/design-system.md — follow these visual specifications for all UI work. Do not hardcode colors, font sizes, spacing, or shadows.
 - Tailwind config: See tailwind.config.js for design tokens as Tailwind theme extensions. Always use theme classes, never hardcode values.
+- Related item list feature: See /docs/feature-spec-related-item-list.md — spec for the RelatedItemList component, including data fetching, states, design tokens, and acceptance criteria.
+- Cart page feature: See /docs/feature-spec-cart-page.md — spec for the Cart page, CartItem component, and cart.js API module, including persistence via Supabase and NavBar badge sync.

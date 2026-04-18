@@ -31,9 +31,15 @@ const VARIANT_STYLES = {
     'bg-transparent border border-accent text-accent hover:bg-secondary-sage active:bg-secondary-sage disabled:opacity-40 disabled:cursor-not-allowed',
 }
 
+const SIZE_STYLES = {
+  md: 'px-space-lg py-space-md',
+  sm: 'px-space-md py-space-sm',
+}
+
 export default function Button({
   children,
   variant = 'primary',
+  size = 'md',
   onClick,
   type = 'button',
   disabled = false,
@@ -48,7 +54,7 @@ export default function Button({
       className={[
         'inline-flex items-center justify-center gap-space-sm',
         'rounded-radius-md text-small font-jost font-medium',
-        'px-space-lg py-space-md',
+        SIZE_STYLES[size] ?? SIZE_STYLES.md,
         'transition-colors duration-150 focus:outline-none',
         VARIANT_STYLES[variant] ?? VARIANT_STYLES.primary,
         fullWidth ? 'w-full' : '',

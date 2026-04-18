@@ -1,6 +1,6 @@
 # Component Specification: Clean Shopper
-**Version:** 1.1
-**Last Updated:** 2026-04-16
+**Version:** 1.3
+**Last Updated:** 2026-04-17
 **Source:** Generated from /docs/design-system.md and tailwind.config.js
 
 ---
@@ -22,6 +22,8 @@ All Tailwind classes below reference tokens defined in `tailwind.config.js`. Nev
 6. [Button](#6-button)
 7. [InputField](#7-inputfield)
 8. [EmptyState](#8-emptystate)
+9. [RelatedItemList](#9-relateditemlist)
+10. [CartItem](#10-cartitem)
 
 ---
 
@@ -457,6 +459,122 @@ EmptyState is a static display component. It has no interactive states of its ow
 - **Always include both `heading` and `description`.** A heading alone does not give the user enough direction.
 - **Use the `action` prop** when there is a clear, direct next step the user can take from the empty state. Omit it when the empty state is informational and the action belongs elsewhere (e.g. the search bar is already visible above).
 - Do not use more than one EmptyState per view.
+
+---
+
+## 9. RelatedItemList
+
+**Purpose:** Displays a horizontally scrollable row of up to 4 products from the same category as the currently viewed product. Surfaces discovery paths ("what else is in this category?") without requiring the user to return to search. Specific to the Research/Browse screen — lives in `src/features/browse/`, not `src/components/`.
+
+### Props
+
+| Prop | Type | Required | Description |
+|---|---|---|---|
+| `category` | `string` | ✅ | Category of the selected product — used as the Supabase filter |
+| `excludeProductId` | `string` | ✅ | ID of the currently viewed product — excluded from query results |
+| `onSave` | `function` | ❌ | Passed through to each `ProductCard`'s `onSave` prop |
+| `onAddToCart` | `function` | ❌ | Passed through to each `ProductCard`'s `onAddToCart` prop |
+| `onViewCategory` | `function` | ❌ | Called with `category` when the user clicks "See all in [Category]"; button only renders when this prop is provided and results are non-empty |
+
+### Visual Structure
+
+```
+Related Products in [Category]         ← text-h2 font-cormorant text-neutral-900
+                                          mt-space-2xl mb-space-lg
+
+┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐
+│ProductCard│ │ProductCard│ │ProductCard│ │ProductCard│  ← min-w-[280px] each
+└──────────┘ └──────────┘ └──────────┘ └──────────┘
+                                          flex gap-space-lg overflow-x-auto pb-space-md
+
+              [See all in Personal Care]  ← Button secondary, mt-space-lg
+```
+
+**Section wrapper:** `mt-space-2xl`
+
+**Section heading:** `text-h2 font-cormorant text-neutral-900 mb-space-lg`
+Heading text: `"Related Products in {category}"`
+
+**Card row:** `flex gap-space-lg overflow-x-auto pb-space-md`
+Each card: `min-w-[280px]` — maintains readable width during horizontal scroll.
+
+**"See all" action:** `mt-space-lg flex justify-start`
+Rendered using `Button` with `variant="secondary"`, label `"See all in {category}"`.
+Only rendered when `onViewCategory` is provided and results are non-empty.
+
+### States
+
+| State | Behavior |
+|---|---|
+| Loading | 4 `ProductCard` skeletons (`isLoading={true}`). Section heading visible — no layout shift on load. |
+| Loaded with results | Up to 4 `ProductCard` components with real product data, ordered clean → mixed → avoid. |
+| Loaded — no results | `EmptyState` in place of card row. "See all" button hidden. |
+| Error | Component returns `null` — related products are a discovery enhancement, not a primary flow. No error state surfaced to the user. |
+
+### Data
+
+Supabase query lives in `src/lib/api/related-products.js` — export `fetchRelatedProducts(category, excludeProductId)`. Component fetches on mount and when `category` or `excludeProductId` changes. Local `useState` manages `products`, `isLoading`, and `error`.
+
+### Usage Rules
+
+- **Use when:** A product has been assessed and selected in the Research tab and the user needs a path to related alternatives.
+- **Do not use in:** The Library, Cart, or Preferences views — this component is scoped to the Research/Browse screen.
+- **Do not render** when the component is in an error state — return `null` silently.
+- **Do not exceed 4 cards.** Limit results at the query level, not via slicing in the component.
+- The selected product must always be excluded from its own related list via `excludeProductId`.
+- "See all" button is secondary — never render it as a primary `Button`.
+
+---
+
+## 10. CartItem
+
+**Purpose:** A compact row displaying a single product in the Cart page. Shows the product name, brand, category, and safety rating with a remove action. Intentionally lighter than `ProductCard` — no image, no summary — because the cart is an action list, not a research view. Scoped to `src/features/cart/`; not a shared component.
+
+### Props
+
+| Prop | Type | Required | Description |
+|---|---|---|---|
+| `product` | `object` | ✅ | Product data: `id`, `name`, `brand`, `category`, `rating` |
+| `onRemove` | `function` | ✅ | Called when the user clicks the remove (×) button |
+| `isLoading` | `boolean` | ❌ | When `true`, renders the skeleton variant |
+
+### Visual Structure
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  Product Name                 [Personal Care]  [Clean] ✕  │
+│  Brand Name                                               │
+└──────────────────────────────────────────────────────────┘
+```
+
+**Container:** `flex items-center justify-between gap-space-md bg-secondary-cream rounded-radius-md px-space-lg py-space-md hover:shadow-sm transition-shadow duration-150`
+
+**Left block:** `flex flex-col gap-space-xs`
+- Product name: `text-h4 font-cormorant text-neutral-900`
+- Brand: `text-small font-jost text-neutral-600`
+
+**Right block:** `flex items-center gap-space-sm shrink-0`
+- `CategoryTag label={category}` — non-clickable
+- `SafetyBadge rating={rating} size="sm"`
+- Remove button: icon-only `<button>` with an × SVG; `text-neutral-400 hover:text-error transition-colors duration-150 focus:outline-none`
+
+**Skeleton:** Two `bg-neutral-200 rounded-radius-md animate-pulse` blocks on the left; two pill-shaped skeleton blocks on the right. Container retains full structure and dimensions.
+
+### States
+
+| State | Behavior |
+|---|---|
+| Default | `bg-secondary-cream`, no shadow |
+| Hover | `shadow-sm` via `hover:shadow-sm transition-shadow duration-150` |
+| Loading | Skeleton placeholders; no content rendered |
+| Removing | Optimistic — row disappears immediately, reverts if API fails |
+
+### Usage Rules
+
+- **Use only inside `CartPage`.** Do not import `CartItem` into any other feature or shared component.
+- **Do not use `ProductCard`** for cart rows — `CartItem` is the correct component here.
+- **Always provide `onRemove`.** There is no read-only cart state.
+- **Do not use for saved products** — the Saved (Preferences) page uses `ProductCard`.
 
 ---
 
