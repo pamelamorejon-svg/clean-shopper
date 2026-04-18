@@ -1,18 +1,37 @@
 import { useState, useEffect } from 'react'
 import ProductCard from '../../components/ProductCard'
+import RelatedItemList from './RelatedItemList'
 import { fetchProducts } from '../../lib/api/products'
 import { fetchSavedProductIds, saveProduct, unsaveProduct } from '../../lib/api/saved-products'
 
 const CATEGORIES = ['All', 'Personal Care', 'Home Cleaning', 'Baby Care', 'Kitchen']
 
+// ─── Breadcrumb ───────────────────────────────────────────────────────────────
+
+function Breadcrumb({ productName, onBack }) {
+  return (
+    <nav className="flex items-center gap-space-xs text-small font-jost mb-space-xl" aria-label="Breadcrumb">
+      <button
+        onClick={onBack}
+        className="text-accent hover:text-accent-light transition-colors duration-150"
+      >
+        Browse Products
+      </button>
+      <span className="text-neutral-400" aria-hidden="true">/</span>
+      <span className="text-neutral-600 truncate max-w-xs">{productName}</span>
+    </nav>
+  )
+}
+
 // ─── BrowsePage ───────────────────────────────────────────────────────────────
 
-export default function BrowsePage({ onNavigate }) {
+export default function BrowsePage({ onNavigate, onAddToCart }) {
   const [products, setProducts] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
   const [activeCategory, setActiveCategory] = useState('All')
   const [savedIds, setSavedIds] = useState(new Set())
+  const [selectedProduct, setSelectedProduct] = useState(null)
 
   useEffect(() => {
     Promise.all([fetchProducts(), fetchSavedProductIds()])
@@ -32,7 +51,6 @@ export default function BrowsePage({ onNavigate }) {
   async function toggleSave(id) {
     const isSaved = savedIds.has(id)
 
-    // Optimistic update
     setSavedIds((prev) => {
       const next = new Set(prev)
       isSaved ? next.delete(id) : next.add(id)
@@ -42,7 +60,6 @@ export default function BrowsePage({ onNavigate }) {
     try {
       isSaved ? await unsaveProduct(id) : await saveProduct(id)
     } catch {
-      // Revert on failure
       setSavedIds((prev) => {
         const next = new Set(prev)
         isSaved ? next.add(id) : next.delete(id)
@@ -51,26 +68,52 @@ export default function BrowsePage({ onNavigate }) {
     }
   }
 
+  // ─── Detail view ────────────────────────────────────────────────────────────
+  if (selectedProduct) {
+    return (
+      <div className="min-h-screen bg-neutral-50">
+        <div className="max-w-screen-xl mx-auto px-space-lg pt-space-2xl pb-space-2xl">
+
+          <Breadcrumb
+            productName={selectedProduct.name}
+            onBack={() => setSelectedProduct(null)}
+          />
+
+          <div className="max-w-lg">
+            <ProductCard
+              product={selectedProduct}
+              isSaved={savedIds.has(selectedProduct.id)}
+              onSave={() => toggleSave(selectedProduct.id)}
+              onAddToCart={onAddToCart ? () => onAddToCart(selectedProduct.id) : undefined}
+            />
+          </div>
+
+          <RelatedItemList
+            category={selectedProduct.category}
+            excludeProductId={selectedProduct.id}
+            onSave={(id) => toggleSave(id)}
+            onAddToCart={onAddToCart}
+            onViewCategory={(cat) => {
+              setActiveCategory(cat)
+              setSelectedProduct(null)
+            }}
+          />
+
+        </div>
+      </div>
+    )
+  }
+
+  // ─── Grid view ──────────────────────────────────────────────────────────────
   return (
     <div className="min-h-screen bg-neutral-50">
 
       {/* Page header */}
-      <div className="max-w-screen-xl mx-auto px-space-lg pt-space-2xl pb-space-xl flex items-start justify-between gap-space-lg">
-        <div>
-          <h1 className="text-h1 font-cormorant text-neutral-900">Browse Products</h1>
-          <p className="text-body font-jost text-neutral-600 mt-space-sm">
-            AI-assessed products ranked by ingredient safety. Save the ones worth buying.
-          </p>
-        </div>
-        <button
-          onClick={() => onNavigate('library')}
-          className="shrink-0 inline-flex items-center gap-space-xs text-small font-jost text-accent hover:text-accent-light transition-colors duration-150 mt-space-sm"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
-          </svg>
-          Search products
-        </button>
+      <div className="max-w-screen-xl mx-auto px-space-lg pt-space-2xl pb-space-xl">
+        <h1 className="text-h1 font-cormorant text-neutral-900">Shop Clean</h1>
+        <p className="text-body font-jost text-neutral-600 mt-space-sm">
+          Clean ingredients, clearly explained. Find products you can feel good about bringing home.
+        </p>
       </div>
 
       {/* Category filter row */}
@@ -85,7 +128,7 @@ export default function BrowsePage({ onNavigate }) {
                 className={[
                   'inline-flex items-center rounded-radius-sm text-small font-jost px-space-sm py-space-xs cursor-pointer transition-colors duration-150',
                   isActive
-                    ? 'bg-primary-dark text-neutral-50'
+                    ? 'bg-accent-light text-neutral-50'
                     : 'bg-secondary-sage text-neutral-900 hover:bg-primary-light',
                 ].join(' ')}
               >
@@ -116,12 +159,21 @@ export default function BrowsePage({ onNavigate }) {
         {!isLoading && !error && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-space-lg">
             {visibleProducts.map((product) => (
-              <ProductCard
+              <div
                 key={product.id}
-                product={product}
-                isSaved={savedIds.has(product.id)}
-                onSave={() => toggleSave(product.id)}
-              />
+                onClick={(e) => {
+                  if (e.target.closest('button')) return
+                  setSelectedProduct(product)
+                }}
+                className="cursor-pointer"
+              >
+                <ProductCard
+                  product={product}
+                  isSaved={savedIds.has(product.id)}
+                  onSave={() => toggleSave(product.id)}
+                  onAddToCart={onAddToCart ? () => onAddToCart(product.id) : undefined}
+                />
+              </div>
             ))}
           </div>
         )}

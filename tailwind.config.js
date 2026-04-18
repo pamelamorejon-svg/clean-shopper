@@ -68,6 +68,14 @@ export default {
         'radius-full': '9999px',
       },
 
+      // ─── Component Dimensions ─────────────────────────────────────
+      width: {
+        'card-min': '280px',
+      },
+      minWidth: {
+        'card-min': '280px',
+      },
+
       // ─── Shadows ───────────────────────────────────────────────────
       boxShadow: {
         sm: '0 1px 3px rgba(44, 36, 32, 0.06)',
