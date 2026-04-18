@@ -1,0 +1,12 @@
+#!/bin/sh
+echo "🧪 Running Playwright e2e tests before commit..."
+npm test
+
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "❌ Playwright tests failed. Commit blocked."
+  echo "   Fix the failing tests and try again."
+  exit 1
+fi
+
+echo "✅ All tests passed. Proceeding with commit."
