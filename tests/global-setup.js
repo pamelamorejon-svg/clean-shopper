@@ -49,11 +49,13 @@ export default async function globalSetup() {
     console.log(`  ✓ Test account ready: ${TEST_EMAIL}`)
   }
 
-  // ── Clear saved products from previous runs ─────────────────────────────────
-  // Ensures save.spec.js always starts with no pre-saved products.
+  // ── Clear test data from previous runs ──────────────────────────────────────
+  // Ensures save.spec.js and cart.spec.js always start from a clean slate.
   const { data: { user } } = await supabase.auth.getUser()
   if (user) {
     await supabase.from('saved_products').delete().eq('user_id', user.id)
     console.log(`  ✓ Cleared saved products for test user`)
+    await supabase.from('cart_items').delete().eq('user_id', user.id)
+    console.log(`  ✓ Cleared cart items for test user`)
   }
 }
