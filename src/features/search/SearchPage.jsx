@@ -37,8 +37,8 @@ function ErrorState({ message }) {
 
 // ─── SearchPage ───────────────────────────────────────────────────────────────
 
-export default function SearchPage({ onNavigate }) {
-  const [query, setQuery] = useState('')
+export default function SearchPage({ onNavigate, initialQuery = '', onQueryConsumed }) {
+  const [query, setQuery] = useState(initialQuery)
   const [results, setResults] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -52,10 +52,16 @@ export default function SearchPage({ onNavigate }) {
     fetchSavedProductIds().then(setSavedIds).catch(() => {})
   }, [])
 
-  async function handleSubmit() {
-    const term = query.trim()
-    if (!term) return
+  // Auto-run search when initialQuery is provided from the header overlay
+  useEffect(() => {
+    if (initialQuery) {
+      setQuery(initialQuery)
+      runSearch(initialQuery)
+      onQueryConsumed?.()
+    }
+  }, [initialQuery])
 
+  async function runSearch(term) {
     if (abortRef.current) abortRef.current = false
 
     setSubmittedQuery(term)
@@ -74,6 +80,12 @@ export default function SearchPage({ onNavigate }) {
     } finally {
       if (!cancelled) setIsLoading(false)
     }
+  }
+
+  function handleSubmit() {
+    const term = query.trim()
+    if (!term) return
+    runSearch(term)
   }
 
   async function toggleSave(id) {
@@ -110,7 +122,7 @@ export default function SearchPage({ onNavigate }) {
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m15 18-6-6 6-6"/>
           </svg>
-          Browse all products
+          Browse all
         </button>
         <h1 className="text-h1 font-cormorant text-neutral-900">Search Products</h1>
         <p className="text-body font-jost text-neutral-600 mt-space-sm">
